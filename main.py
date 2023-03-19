@@ -1,6 +1,16 @@
 import matplotlib.pyplot as plt
 
 # cadena de prueba 11001101011
+# pariedad impar == 1
+
+#0 representa paridad par, 1 paridad impar
+def verificar_paridad(binario):
+    unos = binario.count('1')
+    if unos % 2 == 0:
+        return 0
+    else:
+        return 1
+
 
 def verificar_binario(num_bin):
     """Verifica que el número ingresado sea binario y tenga 11 bits."""
@@ -68,8 +78,9 @@ def graficar_codigo_nrzl(cadena_binaria):
 def programa():
     """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
     while True:
+        paridad = int(input("Ingrese un 0 si desea paridad par o 1 si desea impar: \n"))
         num_bin = input("Ingrese un número binario de 11 bits: ")
-        if verificar_binario(num_bin):
+        if verificar_binario(num_bin) and (paridad == verificar_paridad(num_bin)):
             num_hex = convertir_binario_a_hexadecimal(num_bin)
             if verificar_rango(int(num_bin, 2)):
                 print(
