@@ -75,7 +75,7 @@ def graficar_codigo_nrzl(cadena_binaria):
     plt.show()
 
 
-def programa():
+def programa(paridad,num_bin):
     """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
     while True:
         paridad = int(input("Ingrese un 0 si desea paridad par o 1 si desea impar: \n"))

@@ -1,0 +1,59 @@
+#:kivy 2.0.0
+
+<CustomLabel@Label>:
+    font_size: '24sp'
+    bold: True
+    text_size: self.size
+  
+
+<NormalLabel@Label>:
+    font_size: '16sp'
+    text_size: self.size
+
+<HammingEncoder>:
+
+    CustomLabel:
+        text: 'Hamming Encoder'
+        pos: 50,550 
+    
+    NormalLabel:
+        text: 'Escoga la paridad:'
+        size: 100, 100
+        pos: 50,500
+
+    Spinner:
+        id: parity_spinner
+        text: 'Paridad'
+        values: ['par', 'impar']
+        size_hint: (None, None)  # desactiva size_hint para establecer el tamaño en píxeles
+        size: 150, 60  # establece el tamaño en píxeles
+        pos: 50,430
+    
+    NormalLabel:
+        text: 'Ingrese numero binario de 11 bits:'
+        size: 100, 100
+        pos: 50,390
+                
+    TextInput:
+        id: binary_input
+        on_text_validate: app.validar_entrada_binaria(self)
+        on_text: app.validar_entrada_binaria(self)
+        size_hint: (None, None)  # desactiva size_hint para establecer el tamaño en píxeles
+        size: 120, 32  # establece el tamaño en píxeles
+        pos: 50, 345
+
+    Button:
+        text: 'CALCULAR'
+        size_hint: (None, None)  
+        size: 120, 32  
+        pos: 50,300
+
+    NormalLabel:
+        text: 'RESULTADO:'
+        size: 50, 50  # establece el tamaño en píxeles
+        pos: 200, 350
+    
+    NormalLabel:
+        id: resultado
+        size: 50, 50  # establece el tamaño en píxeles
+        pos: 200, 310
