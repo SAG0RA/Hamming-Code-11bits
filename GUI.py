@@ -3,6 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.animation import Animation
 import main
 
 
@@ -21,8 +22,9 @@ class HammingEncoderApp(App):
             instancia.text = instancia.text[:-1]
 
     def calcular(self,paridad_text,num_bin):
-        if(paridad_text == 'Paridad'):
-            popup = Popup(title='Alerta', content=Label(text="Agrega una paridad, asegurate de que\n    coincida con el numero binario"), size_hint=(None, None), size=(400, 200))
+        
+        if(paridad_text == 'Paridad' or num_bin == ''):
+            popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
             popup.open()
         else:
             if(paridad_text == 'par'):
@@ -36,4 +38,22 @@ class HammingEncoderApp(App):
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
+
+    def senalNRZL(self,paridad_text, num_bin):
+        if(paridad_text == 'Paridad' or num_bin == ''):
+            popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
+            popup.open()
+        else:
+            if(paridad_text == 'par'):
+                paridad = 0
+            else: 
+                paridad = 1
+            
+            if(main.verificar_paridad(num_bin) == paridad):
+                main.graficar_codigo_nrzl(num_bin)
+            else:
+                popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
+                popup.open()
+
+
 HammingEncoderApp().run()

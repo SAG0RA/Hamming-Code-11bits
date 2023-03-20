@@ -168,7 +168,7 @@ def programa(paridad,num_bin):
             print(
                 f"El número binario {num_bin} es equivalente al número hexadecimal {num_hex}.")
             convertir_hexadecimal_tabla(num_hex)
-            graficar_codigo_nrzl(num_bin)
+            #graficar_codigo_nrzl(num_bin)
 
 def test():
     codigo = "10100111001"

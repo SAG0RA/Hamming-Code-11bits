@@ -49,19 +49,44 @@
         pos: 50,300
         on_press: app.calcular(parity_spinner.text, binary_input.text)
 
-    NormalLabel:
+    CustomLabel:
         text: 'RESULTADO:'
-        size: 50, 50  # establece el tamaño en píxeles
         pos: 200, 350
     
-    NormalLabel:
+    CustomLabel:
         id: resultado
-        size: 50, 50  # establece el tamaño en píxeles
-        pos: 200, 310
+        pos: 200, 305
     
-    # Button:
-    #     text: 'CALCULAR'
-    #     size_hint: (None, None)  
-    #     size: 120, 32  
-    #     pos: 50,300
-    #     on_press: app.calcular(parity_spinner.text, binary_input.text)
+    BoxLayout:    
+        spacing: 10
+        padding: 15
+        orientation: 'vertical'
+        size_hint: (None, None)
+        size: 280,180  
+        pos: 50,100 
+
+        canvas.before:
+            Color:
+                rgba: 0.8, 0.8, 0.8, 1.0 # Establecer el color del borde a rojo (RGBA: 100% rojo, 0% verde, 0% azul, 100% opacidad)
+            Line:
+                width: 2  # Establecer el ancho del borde a 2 píxeles
+                rectangle: self.x, self.y, self.width, self.height  # Dibujar el borde alrededor del BoxLayout
+        
+        CustomLabel:
+            text: 'Acciones:'
+            # size_hint_y: None
+            halign: 'center'
+            height: 5
+        
+        Button:
+            text: 'Señal digital NRZL'
+            size_hint_y: None
+            height: 50
+            on_press: app.senalNRZL(parity_spinner.text, binary_input.text)
+
+        Button:
+            text: 'Botón 2'
+            size_hint_y: None
+            height: 50
+
+   
