@@ -17,8 +17,12 @@ class HammingEncoderApp(App):
         if not all(c in caracteres_permitidos for c in instancia.text) or len(instancia.text) > 11:
             instancia.text = instancia.text[:-1]
 
-    def calcular():
-        main.programa()   
+    def calcular(self,paridad_text,num_bin):
+        paridad = 0
+        if(paridad_text == 'impar'):
+            paridad = 1
+
+        main.programa(paridad,num_bin)   
     
 
 HammingEncoderApp().run()

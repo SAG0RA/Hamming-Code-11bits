@@ -77,18 +77,17 @@ def graficar_codigo_nrzl(cadena_binaria):
 
 def programa(paridad,num_bin):
     """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
-    while True:
-        paridad = int(input("Ingrese un 0 si desea paridad par o 1 si desea impar: \n"))
-        num_bin = input("Ingrese un número binario de 11 bits: ")
-        if verificar_binario(num_bin) and (paridad == verificar_paridad(num_bin)):
-            num_hex = convertir_binario_a_hexadecimal(num_bin)
-            if verificar_rango(int(num_bin, 2)):
-                print(
-                    f"El número binario {num_bin} es equivalente al número hexadecimal {num_hex}.")
-                convertir_hexadecimal_tabla(num_hex)
-                graficar_codigo_nrzl(num_bin)
-                break
-
+    # while True:
+        # paridad = int(input("Ingrese un 0 si desea paridad par o 1 si desea impar: \n"))
+        # num_bin = input("Ingrese un número binario de 11 bits: ")
+    if verificar_binario(num_bin) and (paridad == verificar_paridad(num_bin)):
+        num_hex = convertir_binario_a_hexadecimal(num_bin)
+        if verificar_rango(int(num_bin, 2)):
+            print(
+                f"El número binario {num_bin} es equivalente al número hexadecimal {num_hex}.")
+            convertir_hexadecimal_tabla(num_hex)
+            graficar_codigo_nrzl(num_bin)
+ 
 
 if __name__ == '__main__':
     programa()
