@@ -63,6 +63,7 @@ def codificar_nrzl(cadena_binaria):
             niveles_tension.append(nivel_actual)
     return niveles_tension
 
+
 def graficar_codigo_nrzl(cadena_binaria):
     # Convertimos el número binario a niveles de tensión utilizando NRZ-L
     niveles_tension = codificar_nrzl(cadena_binaria)
