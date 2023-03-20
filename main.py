@@ -75,6 +75,87 @@ def graficar_codigo_nrzl(cadena_binaria):
     plt.show()
 
 
+def hamming_encode(data):
+    # Calcula el número de bits de paridad necesarios.
+    n = len(data)
+    m = 0
+    while 2**m < n + m + 1:
+        m += 1
+
+    # Calcula la posición de los bits de paridad.
+    positions = []
+    for i in range(m):
+        positions.append(2**i - 1)
+
+    # Agrega los bits de paridad a la secuencia de datos.
+    code = [0] * (n + m)
+    j = 0
+    for i in range(n + m):
+        if i in positions:
+            code[i] = 0
+        else:
+            code[i] = int(data[j])
+            j += 1
+
+    # Calcula los bits de paridad.
+    for i in positions:
+        bit = 0
+        for j in range(len(code)):
+            if ((j+1) >> i) & 1:
+                bit ^= code[j]
+        code[i] = bit
+
+    # Convierte la secuencia de bits a una cadena de texto.
+    code_str = ''.join(str(bit) for bit in code)
+
+    return code_str
+
+
+def hamming_decode(code):
+    # Convierte la cadena de texto en una secuencia de bits.
+    code_bits = [int(bit) for bit in code]
+
+    # Calcula el número de bits de paridad necesarios.
+    n = len(code_bits)
+    m = 0
+    while 2**m < n + 1:
+        m += 1
+
+    # Calcula la posición de los bits de paridad.
+    positions = []
+    for i in range(m):
+        positions.append(2**i - 1)
+
+    # Calcula los bits de paridad recibidos.
+    received_parity = []
+    for i in positions:
+        bit = 0
+        for j in range(len(code_bits)):
+            if ((j+1) >> i) & 1:
+                bit ^= code_bits[j]
+        received_parity.append(bit)
+
+    # Verifica si hay errores y corrige si es necesario.
+    error_position = 0
+    for i, bit in enumerate(received_parity):
+        if bit != 0:
+            error_position += 2**i
+
+    if error_position > 0:
+        code_bits[error_position-1] ^= 1
+
+    # Elimina los bits de paridad y devuelve la secuencia de datos original.
+    data_bits = []
+    for i in range(n):
+        if i not in positions:
+            data_bits.append(code_bits[i])
+
+    # Convierte la secuencia de bits en una cadena de texto.
+    data_str = ''.join(str(bit) for bit in data_bits)
+
+    return data_str
+
+
 def programa(paridad,num_bin):
     """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
     # while True:
@@ -87,7 +168,13 @@ def programa(paridad,num_bin):
                 f"El número binario {num_bin} es equivalente al número hexadecimal {num_hex}.")
             convertir_hexadecimal_tabla(num_hex)
             graficar_codigo_nrzl(num_bin)
- 
+
+def test():
+    codigo = "10100111001"
+    codigoCodi = hamming_encode(codigo)
+    print(codigoCodi)
+    # codigoDeco = hamming_decode(codigoCodi)
+    # print(codigoDeco)
 
 if __name__ == '__main__':
-    programa()
+    test()
