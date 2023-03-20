@@ -1,13 +1,14 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.uix.gridlayout import GridLayout
 
 
-class HammingCode(Widget):
+class HammingEncoder(GridLayout):
     pass
 
 
-class HammingApp(App):
+class guiApp(App):
     def build(self):
-        return HammingCode()
+        return HammingEncoder()
 
-HammingApp().run()
+guiApp().run()
