@@ -77,84 +77,85 @@ def graficar_codigo_nrzl(cadena_binaria):
 
 
 def hamming_encode(data):
-    # Calcula el número de bits de paridad necesarios.
     n = len(data)
-    m = 0
-    while 2**m < n + m + 1:
-        m += 1
+    # Calculamos el número de bits de paridad necesarios (m)
+    for i in range(n):
+        if 2**i >= n + i + 1:
+            m = i
+            break
+    else:
+        m = i + 1
 
-    # Calcula la posición de los bits de paridad.
-    positions = []
-    for i in range(m):
-        positions.append(2**i - 1)
-
-    # Agrega los bits de paridad a la secuencia de datos.
+    # Creamos la palabra de código con los bits de paridad inicializados a 0
     code = [0] * (n + m)
     j = 0
+    k = 0
+    # Recorremos la palabra de código y vamos insertando los bits de datos
+    # y de paridad en las posiciones correspondientes
     for i in range(n + m):
-        if i in positions:
-            code[i] = 0
+        if i+1 == 2**k:
+            k += 1
         else:
             code[i] = int(data[j])
             j += 1
 
-    # Calcula los bits de paridad.
-    for i in positions:
-        bit = 0
-        for j in range(len(code)):
-            if ((j+1) >> i) & 1:
-                bit ^= code[j]
-        code[i] = bit
-
-    # Convierte la secuencia de bits a una cadena de texto.
-    code_str = ''.join(str(bit) for bit in code)
-
-    return code_str
-
-
-def hamming_decode(code):
-    # Convierte la cadena de texto en una secuencia de bits.
-    code_bits = [int(bit) for bit in code]
-
-    # Calcula el número de bits de paridad necesarios.
-    n = len(code_bits)
-    m = 0
-    while 2**m < n + 1:
-        m += 1
-
-    # Calcula la posición de los bits de paridad.
-    positions = []
+    # Calculamos los bits de paridad
     for i in range(m):
-        positions.append(2**i - 1)
+        p = 0
+        # Recorremos la palabra de código sumando los bits correspondientes
+        # para cada bit de paridad
+        for j in range(n + m):
+            if ((j+1) & (2**i)) == (2**i):
+                p ^= code[j]
+        # Asignamos el bit de paridad calculado a la posición correspondiente
+        code[2**i-1] = p
 
-    # Calcula los bits de paridad recibidos.
-    received_parity = []
-    for i in positions:
-        bit = 0
-        for j in range(len(code_bits)):
-            if ((j+1) >> i) & 1:
-                bit ^= code_bits[j]
-        received_parity.append(bit)
+    # Creamos una tabla con los datos de paridad y los datos de base
+    table = []
+    for i in range(m):
+        row = []
+        for j in range(n + m):
+            if ((j+1) & (2**i)) == (2**i):
+                row.append(code[j])
+        row.append(code[2**i-1])
+        table.append(row)
+    return code, table
 
-    # Verifica si hay errores y corrige si es necesario.
-    error_position = 0
-    for i, bit in enumerate(received_parity):
-        if bit != 0:
-            error_position += 2**i
 
-    if error_position > 0:
-        code_bits[error_position-1] ^= 1
+def hamming_decode(encoded_bits):
+    # Calcula el número de bits de paridad necesarios
+    num_parity_bits = 0
+    while 2 ** num_parity_bits <= len(encoded_bits):
+        num_parity_bits += 1
 
-    # Elimina los bits de paridad y devuelve la secuencia de datos original.
-    data_bits = []
-    for i in range(n):
-        if i not in positions:
-            data_bits.append(code_bits[i])
+    # Inicializa la tabla de paridad
+    parity_table = []
+    for i in range(num_parity_bits):
+        # Obtiene los bits correspondientes a esta posición de paridad
+        parity_bits = [encoded_bits[j]
+                       for j in range(len(encoded_bits)) if (j+1) & (2**i)]
+        # Calcula la paridad para estos bits
+        parity = sum(parity_bits) % 2
+        # Agrega la entrada a la tabla de paridad
+        used_bits = [encoded_bits[j] for j in range(
+            len(encoded_bits)) if (j+1) & (2**i) and j != (2**i)-1]
+        parity_table.append(
+            (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))
 
-    # Convierte la secuencia de bits en una cadena de texto.
-    data_str = ''.join(str(bit) for bit in data_bits)
+    # Invierte la lista de bits para facilitar el procesamiento
+    encoded_bits = list(reversed(encoded_bits))
 
-    return data_str
+    # Inicializa el valor decodificado
+    decoded_value = []
+
+    # Decodifica cada bit
+    for i in range(num_parity_bits, len(encoded_bits)):
+        # Ignora los bits de paridad
+        if (i+1) & i:
+            decoded_value.append(encoded_bits[i])
+
+    # Invierte el valor decodificado y devuelve el valor y la tabla de paridad
+    return list(reversed(decoded_value)), parity_table
 
 
 def programa(paridad,num_bin):
@@ -171,11 +172,20 @@ def programa(paridad,num_bin):
             #graficar_codigo_nrzl(num_bin)
 
 def test():
-    codigo = "10100111001"
-    codigoCodi = hamming_encode(codigo)
-    print(codigoCodi)
-    # codigoDeco = hamming_decode(codigoCodi)
-    # print(codigoDeco)
+    codigo = "0110101"
+    # code, table = hamming_encode(codigo)
+    # print('Palabra de código:', code)
+    # print('Tabla de paridad:')
+    # for row in table:
+    #     print(row)
+    bits = [1, 0, 1, 1, 0, 1, 0]
+    decoded_value, parity_table = hamming_decode(bits)
+    print("Valor decodificado:", decoded_value)
+    print("Tabla de paridad:")
+    for entry in parity_table:
+        print(
+            f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")
+
 
 if __name__ == '__main__':
     test()

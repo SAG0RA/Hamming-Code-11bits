@@ -4,6 +4,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.video import Video
+from Table import Table
 import main
 
 
@@ -60,7 +61,16 @@ class HammingEncoderApp(App):
     
     def show_popup(self):
         self.ids.popup.open()
+    
+    def show_table(self, paridad_text, num_bin):
+        # Crear contenido del Popup
+        # Numero de prueba para la tabla, reemplazar por num_bin
+        content = Table("11001101011")
+
+        # Crear el Popup y mostrarlo
+        popup = Popup(title="Tabla", content=content, size_hint=(0.9, 0.9))
+        popup.open()
 
 
-
-HammingEncoderApp().run()
+if __name__ == '__main__':
+    HammingEncoderApp().run()
