@@ -1,38 +1,42 @@
 #:kivy 2.0.0
 
 <CustomLabel@Label>:
-    font_size: '24sp'
-    bold: True
     text_size: self.size
+    font_name: 'Dependencias\Minecraft.ttf'
+    color: 1, 0.6, 0.2, 1
   
 
 <NormalLabel@Label>:
     font_size: '16sp'
+    font_name: 'Dependencias\Minecraft.ttf'
     text_size: self.size
 
-<HammingEncoder>:
 
+
+<HammingEncoder>:
     CustomLabel:
-        text: 'Hamming Encoder'
-        pos: 50,550 
+        font_size: '30sp'
+        text: 'HAMMING ENCODER +'
+        pos: 35,550 
     
     NormalLabel:
         text: 'Escoga la paridad:'
         size: 100, 100
-        pos: 50,500
+        pos: 60,500
 
     Spinner:
         id: parity_spinner
+        font_name: 'Dependencias\Minecraft.ttf'
         text: 'Paridad'
         values: ['par', 'impar']
         size_hint: (None, None)  # desactiva size_hint para establecer el tamaño en píxeles
         size: 150, 60  # establece el tamaño en píxeles
-        pos: 50,430
+        pos: 60,430
     
     NormalLabel:
         text: 'Ingrese numero binario de 11 bits:'
         size: 100, 100
-        pos: 50,390
+        pos: 60,390
                 
     TextInput:
         id: binary_input
@@ -40,30 +44,34 @@
         on_text: app.validar_entrada_binaria(self)
         size_hint: (None, None)  # desactiva size_hint para establecer el tamaño en píxeles
         size: 120, 32  # establece el tamaño en píxeles
-        pos: 50, 345
+        pos: 60, 345
 
     Button:
         text: 'CALCULAR'
+        font_name: 'Dependencias\Minecraft.ttf'
         size_hint: (None, None)  
         size: 120, 32  
-        pos: 50,300
+        pos: 60,300
         on_press: app.calcular(parity_spinner.text, binary_input.text)
 
     CustomLabel:
-        text: 'RESULTADO:'
-        pos: 200, 350
+        text: 'Resultado (HEX):'
+        pos: 210, 350
+        font_size: '20sp'
     
     CustomLabel:
         id: resultado
-        pos: 200, 305
+        font_size: '20sp'
+        color: 1, 0, 0, 1
+        pos: 210, 305
     
     BoxLayout:    
         spacing: 10
         padding: 15
         orientation: 'vertical'
         size_hint: (None, None)
-        size: 280,180  
-        pos: 50,100 
+        size: 280,230  
+        pos: 60,50
 
         canvas.before:
             Color:
@@ -74,19 +82,35 @@
         
         CustomLabel:
             text: 'Acciones:'
+            font_size: '20sp'
             # size_hint_y: None
             halign: 'center'
             height: 5
         
         Button:
             text: 'Señal digital NRZL'
+            font_name: 'Dependencias\Minecraft.ttf'
             size_hint_y: None
             height: 50
             on_press: app.senalNRZL(parity_spinner.text, binary_input.text)
 
         Button:
-            text: 'Botón 2'
+            text: 'Tabla de paridad'
+            font_name: 'Dependencias\Minecraft.ttf'
             size_hint_y: None
             height: 50
-
+        
+        Button:
+            text: 'Comprobacion de paridad'
+            font_name: 'Dependencias\Minecraft.ttf'
+            size_hint_y: None
+            height: 50
+    
+    
+    Video:
+        source: 'Dependencias\germ.gif'
+        state: 'play'
+        size_hint: (None, None)
+        size: (100, 100)
+        pos: 240,435
    

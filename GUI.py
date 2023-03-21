@@ -3,7 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
-from kivy.animation import Animation
+from kivy.uix.video import Video
 import main
 
 
@@ -15,6 +15,9 @@ class HammingEncoderApp(App):
     
     def build(self):
         return HammingEncoder()
+    
+    def on_start(self):
+        self.root_window.size = (395, 600)
     
     def validar_entrada_binaria(self, instancia):
         caracteres_permitidos = set('01')
@@ -54,6 +57,10 @@ class HammingEncoderApp(App):
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
+    
+    def show_popup(self):
+        self.ids.popup.open()
+
 
 
 HammingEncoderApp().run()
