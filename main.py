@@ -76,50 +76,20 @@ def graficar_codigo_nrzl(cadena_binaria):
     plt.show()
 
 
-def hamming_encode(data):
-    n = len(data)
-    # Calculamos el número de bits de paridad necesarios (m)
-    for i in range(n):
-        if 2**i >= n + i + 1:
-            m = i
-            break
-    else:
-        m = i + 1
-
-    # Creamos la palabra de código con los bits de paridad inicializados a 0
-    code = [0] * (n + m)
-    j = 0
-    k = 0
-    # Recorremos la palabra de código y vamos insertando los bits de datos
-    # y de paridad en las posiciones correspondientes
-    for i in range(n + m):
-        if i+1 == 2**k:
-            k += 1
+def nrzi_plot(binary_string):
+    signal = [1]  # Comenzamos con un nivel alto
+    for bit in binary_string:
+        if bit == '0':
+            signal.append(signal[-1])  # No cambia el nivel
         else:
-            code[i] = int(data[j])
-            j += 1
+            signal.append(-signal[-1])  # Cambia el nivel
 
-    # Calculamos los bits de paridad
-    for i in range(m):
-        p = 0
-        # Recorremos la palabra de código sumando los bits correspondientes
-        # para cada bit de paridad
-        for j in range(n + m):
-            if ((j+1) & (2**i)) == (2**i):
-                p ^= code[j]
-        # Asignamos el bit de paridad calculado a la posición correspondiente
-        code[2**i-1] = p
-
-    # Creamos una tabla con los datos de paridad y los datos de base
-    table = []
-    for i in range(m):
-        row = []
-        for j in range(n + m):
-            if ((j+1) & (2**i)) == (2**i):
-                row.append(code[j])
-        row.append(code[2**i-1])
-        table.append(row)
-    return code, table
+    plt.plot(signal)
+    plt.ylim(-1.5, 1.5)  # Limitamos el eje y a dos niveles
+    plt.title("Código NRZI de {}".format(binary_string))
+    plt.xlabel("Tiempo")
+    plt.ylabel("Nivel de señal")
+    plt.show()
 
 
 def hamming_decode(encoded_bits):
@@ -171,21 +141,80 @@ def programa(paridad,num_bin):
             convertir_hexadecimal_tabla(num_hex)
             #graficar_codigo_nrzl(num_bin)
 
+
+def nrzi_encoding(binary_data):
+    # Suponemos que la señal está en nivel bajo antes de t=0
+    signal_level = 0
+
+    # Inicializamos las listas de tiempo y amplitud de la señal
+    time = [0]
+    amplitude = [0]
+
+    # Recorremos cada bit del número binario de entrada
+    for bit in binary_data:
+        # Si el bit es un 1, invertimos el nivel de la señal
+        if bit == '1':
+            signal_level = not signal_level
+
+        # Añadimos el tiempo y la amplitud correspondiente al nivel actual de la señal
+        time.append(time[-1] + 1)
+        amplitude.append(signal_level)
+
+    # Mostramos la figura de la señal codificada
+    plt.plot(time, amplitude)
+    plt.title('Codificación NRZI de ' + binary_data)
+    plt.xlabel('Tiempo')
+    plt.ylabel('Nivel de señal')
+    plt.ylim(-0.2, 1.2)
+    plt.show()
+
+
+def nrzi_encoding2(binary_data):
+    # Suponemos que la señal está en nivel bajo antes de t=0
+    signal_level = 0
+
+    # Inicializamos las listas de tiempo y amplitud de la señal
+    time = [0]
+    amplitude = [0]
+
+    # Recorremos cada bit del número binario de entrada
+    for bit in binary_data:
+        # Si el bit es un 1, invertimos el nivel de la señal
+        if bit == '1':
+            signal_level = not signal_level
+
+        # Añadimos el tiempo y la amplitud correspondiente al nivel actual de la señal
+        time.append(time[-1])
+        amplitude.append(signal_level)
+        time.append(time[-1] + 1)
+        amplitude.append(signal_level)
+
+    # Mostramos la figura de la señal codificada
+    plt.step(time, amplitude, where='post')
+    plt.title('Codificación NRZI de ' + binary_data)
+    plt.xlabel('Tiempo')
+    plt.ylabel('Nivel de señal')
+    plt.ylim(-0.2, 1.2)
+    plt.show()
+
+
 def test():
-    codigo = "0110101"
+    # Decoding a Hamming code.
+    # codigo = "0110101"
     # code, table = hamming_encode(codigo)
     # print('Palabra de código:', code)
     # print('Tabla de paridad:')
     # for row in table:
     #     print(row)
-    bits = [1, 0, 1, 1, 0, 1, 0]
-    decoded_value, parity_table = hamming_decode(bits)
-    print("Valor decodificado:", decoded_value)
-    print("Tabla de paridad:")
-    for entry in parity_table:
-        print(
-            f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")
-
+    # bits = [1, 0, 1, 1, 0, 1, 0]
+    # decoded_value, parity_table = hamming_decode(bits)
+    # print("Valor decodificado:", decoded_value)
+    # print("Tabla de paridad:")
+    # for entry in parity_table:
+    #     print(
+    #         f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")
+    bits = '10100101011'
+    nrzi_encoding2(bits)
 
 if __name__ == '__main__':
     test()
