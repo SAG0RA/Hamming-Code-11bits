@@ -4,7 +4,33 @@
     text_size: self.size
     font_name: 'Dependencias\Minecraft.ttf'
     color: 1, 0.6, 0.2, 1
-  
+
+<HeaderLabel@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    font_size: '10sp'
+    font_name: 'Dependencias\Minecraft.ttf'
+    bold: True
+    size:20,20
+    size_hint: (None, None)
+
+
+<TablaLabel@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    font_size: '10sp'
+    bold: True
+    size:20,20
+    size_hint: (None, None)
+
 
 <NormalLabel@Label>:
     font_size: '16sp'
@@ -14,6 +40,7 @@
 
 
 <HammingEncoder>:
+
     CustomLabel:
         font_size: '30sp'
         text: 'HAMMING ENCODER +'
@@ -99,7 +126,7 @@
             font_name: 'Dependencias\Minecraft.ttf'
             size_hint_y: None
             height: 50
-            on_press: app.show_table(parity_spinner.text, binary_input.text)
+            on_press: app.generarTablaParidad(binary_input.text)
         
         Button:
             text: 'Comprobacion de paridad'
@@ -107,11 +134,104 @@
             size_hint_y: None
             height: 50
     
-    
+    NormalLabel:
+        text: '     [15,11]'
+        pos: 460,500
+        canvas.before:
+            Color:
+                rgba: 0.4, 0.4, 0.4, 1  
+            Rectangle:
+                pos: self.pos
+                size: 95,25
+
     Video:
         source: 'Dependencias\germ.gif'
         state: 'play'
         size_hint: (None, None)
         size: (100, 100)
         pos: 250,435
-   
+    
+
+    BoxLayout:
+        #padding: 3
+        spacing: 4
+        size_hint: (None, None)
+        size:105,155
+        pos: 460, 340
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba:0.4, 0.4, 0.4, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        NormalLabel:
+            color: 0.8, 0.8, 0.8, 1
+            halign: 'center'
+            text: 'Bits:'
+
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P1:'
+        
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P2:'
+        
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P3:'
+
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P4:'
+        
+        NormalLabel:
+            color: 0.8, 0.8, 0.8, 1
+            halign: 'center'
+            text: 'Resultado:'
+    
+#TABLA HAMMING (15,11)
+    BoxLayout:
+        id: header_paridad
+        orientation: 'horizontal'
+        padding: 3
+        spacing: 5
+        size_hint: (None, None)
+        size:377,25        
+        pos: 563, 500
+        canvas.before:
+            Color:
+                rgba:0.4, 0.4, 0.4, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+    GridLayout:
+        id: tabla_paridad
+        size_hint: (None, None)
+        size:380,155
+        pos: 560, 340
+        rows: 6
+        cols: 15
+        spacing: 5
+        padding: 5
+
+        canvas.before:
+            Color:
+                rgba: 0.4, 0.4, 0.4, 1 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+            
+       
+
+           
+
+    

@@ -3,10 +3,13 @@ from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
-from kivy.uix.video import Video
-from Table import Table
+from kivymd.app import MDApp
+from kivymd.uix.datatables import MDDataTable
+from kivy.metrics import dp
 import main
 
+class TablaParidadPopup(Popup):
+    pass
 
 class HammingEncoder(FloatLayout):
     pass
@@ -18,7 +21,11 @@ class HammingEncoderApp(App):
         return HammingEncoder()
     
     def on_start(self):
-        self.root_window.size = (395, 600)
+        header_paridad = self.root.ids.header_paridad
+        headers = ['P1','P2','D1','P3','D2','D3','D4','P4','D5','D6','D7','D8','D9','D10','D11']
+        for i in range(15):
+            header_paridad.add_widget(HeaderLabel(text=str(headers[i])))
+        self.root_window.size = (1000, 600)
     
     def validar_entrada_binaria(self, instancia):
         caracteres_permitidos = set('01')
@@ -58,19 +65,57 @@ class HammingEncoderApp(App):
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
-    
-    def show_popup(self):
-        self.ids.popup.open()
-    
-    def show_table(self, paridad_text, num_bin):
-        # Crear contenido del Popup
-        # Numero de prueba para la tabla, reemplazar por num_bin
-        content = Table("11001101011")
 
-        # Crear el Popup y mostrarlo
-        popup = Popup(title="Tabla", content=content, size_hint=(0.9, 0.9))
-        popup.open()
 
+    def generarTablaParidad(self, num_bin):
+        if(num_bin == ''):
+            popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
+            popup.open()
+        else:
+            tabla_paridad = self.root.ids.tabla_paridad
+            tabla_paridad.clear_widgets()
+
+            resultado,data = main.hamming_encode(num_bin)
+            lista_bits = list(num_bin)
+
+        # Agregar los ceros en las posiciones indicadas
+            for i in (0,1,4,8):
+                    lista_bits.insert(i, '-')
+        
+            bitsParidad = ''.join(lista_bits)
+            print(data)
+        
+            for i in range(15):
+                tabla_paridad.add_widget(TablaLabel(text=bitsParidad[i]))      
+        
+        #Agrega los P1,P2,P3,P4
+            listaP = []
+            for fila in data:
+                listaP.append(fila[:-1])
+
+            listaPString = []
+            for lista in listaP:
+                string = ''.join(str(elemento) for elemento in lista)
+                listaPString.append(string) # eliminamos también la coma y el espacio antes del último elemento
+        
+            print(listaPString)
+        
+            for i in range(4):
+                for j, char in enumerate(listaPString[i]):
+                    tabla_paridad.add_widget(TablaLabel(text=char))
+                
+
+    # Agregar los elementos de la lista resultado a la última fila
+            for i in range(15):
+                tabla_paridad.add_widget(TablaLabel(text=str(resultado[i])))
+
+    
+
+
+class TablaLabel(Label):
+    pass
+class HeaderLabel(Label):
+    pass
 
 if __name__ == '__main__':
     HammingEncoderApp().run()
