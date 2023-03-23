@@ -149,6 +149,7 @@ class HammingEncoderApp(App):
                     tercer_elemento.insert(0, ' ')
                     print(tercer_elemento)
                 
+                
                 for tupla in parity_table:
                     tercer_elemento = tupla[2]
                     for elemento in tercer_elemento:
@@ -158,6 +159,11 @@ class HammingEncoderApp(App):
                 lista_bits_paridad = [str(tupla[1]) for tupla in parity_table]
                 for i in range(4):
                     bit_check.add_widget(CheckBitLabel(text=str(lista_bits_paridad[i])))
+                
+                compro_box = self.root.ids.compro_box
+                lista_comprobacion = [str(tupla[3]) for tupla in parity_table]
+                for i in range(4):
+                    compro_box.add_widget(CheckBitLabel(text=str(lista_comprobacion[i])))
 
                 
     
