@@ -4,16 +4,22 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivymd.app import MDApp
+from kivy.uix.textinput import TextInput
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 import main
 
+
 class TablaParidadPopup(Popup):
     pass
-
 class HammingEncoder(FloatLayout):
     pass
-
+class TablaLabel(Label):
+    pass
+class HeaderLabel(Label):
+    pass
+class GenerarErrorPopup(Label):
+    pass
 
 class HammingEncoderApp(App):
     
@@ -65,7 +71,15 @@ class HammingEncoderApp(App):
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
+    
+    # def generarErrorPopup(self,num_bin):
+       
+    #     resultado,data = main.hamming_encode(num_bin)
+    #     resultado_edit = ''.join(str(bit) for bit in resultado)
 
+    #     generarErrorPopup = GenerarErrorPopup()
+    #     generarErrorPopup.open()
+    #     generarErrorPopup.ids.error_input.hint_text = resultado_edit
 
     def generarTablaParidad(self, num_bin):
         if(num_bin == ''):
@@ -76,10 +90,11 @@ class HammingEncoderApp(App):
             tabla_paridad.clear_widgets()
 
             resultado,data = main.hamming_encode(num_bin)
+
             lista_bits = list(num_bin)
 
         # Agregar los ceros en las posiciones indicadas
-            for i in (0,1,4,8):
+            for i in (0,1,3,7):
                     lista_bits.insert(i, '-')
         
             bitsParidad = ''.join(lista_bits)
@@ -104,18 +119,11 @@ class HammingEncoderApp(App):
                 for j, char in enumerate(listaPString[i]):
                     tabla_paridad.add_widget(TablaLabel(text=char))
                 
-
     # Agregar los elementos de la lista resultado a la última fila
             for i in range(15):
                 tabla_paridad.add_widget(TablaLabel(text=str(resultado[i])))
+                
 
-    
-
-
-class TablaLabel(Label):
-    pass
-class HeaderLabel(Label):
-    pass
 
 if __name__ == '__main__':
     HammingEncoderApp().run()

@@ -176,19 +176,19 @@ def programa(paridad,num_bin):
             #graficar_codigo_nrzl(num_bin)
         
 def test():
-    codigo = "00010011001"
-    code, table = hamming_encode(codigo)
-    print('Palabra de código:', code)
-    print('Tabla de paridad:')
-    for row in table:
-        print(row)
-    # bits = [1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1]
-    # decoded_value, parity_table = hamming_decode(bits)
-    # print("Valor decodificado:", decoded_value)
-    # print("Tabla de paridad:")
-    # for entry in parity_table:
-    #     print(
-    #         f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")
+    # codigo = "00010011001"
+    # code, table = hamming_encode(codigo)
+    # print('Palabra de código:', code)
+    # print('Tabla de paridad:')
+    # for row in table:
+    #     print(row)
+    bits = [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]
+    decoded_value, parity_table = hamming_decode(bits)
+    print("Valor decodificado:", decoded_value)
+    print("Tabla de paridad:")
+    for entry in parity_table:
+        print(
+            f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")
 
 
 if __name__ == '__main__':

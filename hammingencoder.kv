@@ -40,7 +40,6 @@
 
 
 <HammingEncoder>:
-
     CustomLabel:
         font_size: '30sp'
         text: 'HAMMING ENCODER +'
@@ -143,6 +142,11 @@
             Rectangle:
                 pos: self.pos
                 size: 95,25
+    
+    CustomLabel:
+        text: 'Tabla #1. Calculo de los bits de paridad en el codigo Hamming:'
+        pos: 470, 535
+        font_size: '15sp'
 
     Video:
         source: 'Dependencias\germ.gif'
@@ -153,8 +157,8 @@
     
 
     BoxLayout:
-        #padding: 3
-        spacing: 4
+        padding: 3
+        spacing: 3
         size_hint: (None, None)
         size:105,155
         pos: 460, 340
@@ -229,8 +233,39 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
+     
+    Button:
+        text: 'Generar error'
+        font_name: 'Dependencias\Minecraft.ttf'
+        size_hint: (None, None)  
+        size: 120, 32  
+        pos: 460,290
+        on_press: app.generarErrorPopup()
+        
+<GenerarErrorPopup>:
+    title: 'Genera el error en el codigo'
+    size_hint: None, None
+    size: 300, 200
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        
+        CustomLabel:
+            text: 'Cambia el bit para generar error:'
+            # on_text_validate: app.validar_entrada_binaria(self)
+            # on_text: app.validar_entrada_binaria(self)
             
-       
+        TextInput:
+            id: error_input
+            hint_text: 
+            font_size: '15sp'
+        
+        Button:
+            text: 'Ingresar'
+            size_hint: 1, 0.5
+            on_press: root.dismiss()    
 
            
 
