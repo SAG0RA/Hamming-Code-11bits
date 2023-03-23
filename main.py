@@ -1,5 +1,6 @@
+import operator
 import matplotlib.pyplot as plt
-import math
+from functools import reduce
 
 # cadena de prueba 11001101011
 # pariedad impar == 1
@@ -139,17 +140,20 @@ def hamming_decode(encoded_bits):
         # Obtiene los bits correspondientes a esta posición de paridad
         parity_bits = [encoded_bits[j]
                        for j in range(len(encoded_bits)) if (j+1) & (2**i)]
+
         # Calcula la paridad para estos bits
-        parity = sum(parity_bits) % 2
+        # parity = sum(parity_bits) % 2
+        parity = reduce(operator.xor, parity_bits[1::])
         # Agrega la entrada a la tabla de paridad
         used_bits = [encoded_bits[j] if (j+1) & (2**i) else 'x' for j in range(len(encoded_bits))]
         used_bits.pop(2**i - 1)
         parity_table.append(
-            (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))
+            # (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))
+            (i+1, parity, used_bits, "correcto" if parity == parity_bits[0] else "error"))
 
+    ######################################################ERROR EN LA DECODIFICACIÓN###################################
     # Invierte la lista de bits para facilitar el procesamiento
     encoded_bits = list(reversed(encoded_bits))
-
     # Inicializa el valor decodificado
     decoded_value = []
 
@@ -158,9 +162,7 @@ def hamming_decode(encoded_bits):
         # Ignora los bits de paridad
         if (i+1) & i:
             decoded_value.append(encoded_bits[i])
-        
-    print(list(reversed(decoded_value)), parity_table,used_bits)
-    
+            
     # Invierte el valor decodificado y devuelve el valor y la tabla de paridad
     return list(reversed(decoded_value)), parity_table
 
@@ -186,11 +188,11 @@ def test():
     #     print(row)
     bits = [1, 0, 0, 0, 1, 1, 0,0,1,0,0]
     decoded_value, parity_table = hamming_decode(bits)
-    print("Valor decodificado:", decoded_value)
-    print("Tabla de paridad:", parity_table)
+    print(f"Valor decodificado: {decoded_value}\n")
+    print(f"Tabla de paridad: {parity_table}\n")
     for entry in parity_table:
         print(
-            f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")
+            f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})\n")
 
 
 if __name__ == '__main__':
