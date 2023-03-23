@@ -13,6 +13,14 @@ def verificar_paridad(binario):
     else:
         return 1
 
+def hex_to_bin(hex_num):
+    # Convertimos el número hexadecimal en binario y eliminamos el prefijo "0b"
+    bin_num = bin(int(hex_num, 16))[2:]
+    
+    # Agregamos ceros a la izquierda hasta completar los 11 dígitos
+    bin_num = '0' * (11 - len(bin_num)) + bin_num
+    
+    return bin_num
 
 def verificar_binario(num_bin):
     """Verifica que el número ingresado sea binario y tenga 11 bits."""

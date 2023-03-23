@@ -49,7 +49,7 @@ class HammingEncoderApp(App):
         caracteres_permitidos = set('01')
         if not all(c in caracteres_permitidos for c in instancia.text) or len(instancia.text) > 11:
             instancia.text = instancia.text[:-1]
-
+    
     #FUNCION
     #Esta funcion procesa el numero y calcula sus conversiones
     def calcular(self,paridad_text,num_bin):
@@ -217,7 +217,6 @@ class HammingEncoderApp(App):
             for i in range(15):
                 tabla_paridad.add_widget(TablaLabel(text=str(resultado[i])))
                 
-
 
 if __name__ == '__main__':
     HammingEncoderApp().run()
