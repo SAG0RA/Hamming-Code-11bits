@@ -32,6 +32,19 @@
     size:275,90
     size_hint: (None, None)
 
+<CheckBitLabel@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    font_size: '10sp'
+    font_name: 'Dependencias\Minecraft.ttf'
+    bold: True
+    size:60,20
+    size_hint: (None, None)
+    halign:'center'
     
 <HeaderLabel@Label>:
     canvas.before:
@@ -168,13 +181,13 @@
             on_press: app.generarTablaParidad(binary_input.text)
         
         Button:
-            text: 'Comprobacion de paridad'
+            text: 'Creditos'
             font_name: 'Dependencias\Minecraft.ttf'
             size_hint_y: None
             height: 50
     
-    NormalLabel:
-        text: '     [15,11]'
+    Label:
+        text: '[15,11]'
         pos: 460,500
         canvas.before:
             Color:
@@ -186,6 +199,11 @@
     CustomLabel:
         text: 'Tabla #1. Calculo de los bits de paridad en el codigo Hamming:'
         pos: 470, 535
+        font_size: '15sp'
+    
+    CustomLabel:
+        text: 'Tabla #2. Comprobacion de los bits de paridad:'
+        pos: 470, 250
         font_size: '15sp'
 
     Video:
@@ -283,8 +301,8 @@
         padding: 3
         spacing: 5
         size_hint: (None, None)
-        size:530,25        
-        pos: 463, 250
+        size:527,25        
+        pos: 463, 215
         canvas.before:
             Color:
                 rgba:0.4, 0.4, 0.4, 1
@@ -295,11 +313,11 @@
      
      #BOXLAYOUT PARA ERRORES           
     BoxLayout:
-        padding: 6
-        spacing: 3
+        padding: 5
+        spacing: 4
         size_hint: (None, None)
-        size:105,155
-        pos: 360, 90
+        size:105,130
+        pos: 360, 80
         orientation: 'vertical'
         canvas.before:
             Color:
@@ -311,33 +329,40 @@
         NormalLabel:
             color: 0.8, 0.8, 0.8, 1
             halign: 'center'
-            text: 'Bits:'
+            text: 'Bits ERR:'
+            font_size:'14sp'
 
         NormalLabel:
             color: 0, 0, 0, 1
             halign: 'center'
             text: 'P1:'
+
+            font_size:'14sp'
         
         NormalLabel:
             color: 0, 0, 0, 1
             halign: 'center'
             text: 'P2:'
+            font_size:'14sp'
         
         NormalLabel:
             color: 0, 0, 0, 1
             halign: 'center'
-            text: 'P3:'
+            text: 'P3:'    
+            font_size:'14sp'
 
         NormalLabel:
             color: 0, 0, 0, 1
             halign: 'center'
             text: 'P4:'
+            font_size:'14sp'
+        
     
     GridLayout:
         id: tabla_errores
         size_hint: (None, None)
-        size:380,155
-        pos: 460, 90
+        size:380,130
+        pos: 460, 80
         rows: 5
         cols: 15
         spacing: 5
@@ -360,7 +385,22 @@
         pos: 460,290
         on_press: app.generarErrorPopup(binary_input.text)
     
-    
+    #BOXLAYOUT DE BITS DE PARIDAD
+    BoxLayout:
+        id: bit_check
+        padding: 7
+        spacing: 5
+        size_hint: (None, None)
+        size:73,110
+        pos: 915, 80
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba:0.8, 0.8, 0.8, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
         
 <GenerarErrorPopup>:
     id: error_popup

@@ -55,17 +55,33 @@ def convertir_hexadecimal_tabla(num_hex):
     return num_dec,num_bin,num_oct
 
 
-def codificar_nrzl(cadena_binaria):
-    """Codifica una cadena binaria utilizando la codificación NRZ-L."""
-    niveles_tension = []
-    nivel_actual = -1
-    for bit in cadena_binaria:
-        if bit == '0':
-            niveles_tension.append(nivel_actual)
-        else:
-            nivel_actual *= -1
-            niveles_tension.append(nivel_actual)
-    return niveles_tension
+def nrzi_encoding2(binary_data):
+    # Suponemos que la señal está en nivel bajo antes de t=0
+    signal_level = 0
+
+    # Inicializamos las listas de tiempo y amplitud de la señal
+    time = [0]
+    amplitude = [0]
+
+    # Recorremos cada bit del número binario de entrada
+    for bit in binary_data:
+        # Si el bit es un 1, invertimos el nivel de la señal
+        if bit == '1':
+            signal_level = not signal_level
+
+        # Añadimos el tiempo y la amplitud correspondiente al nivel actual de la señal
+        time.append(time[-1])
+        amplitude.append(signal_level)
+        time.append(time[-1] + 1)
+        amplitude.append(signal_level)
+
+    # Mostramos la figura de la señal codificada
+    plt.step(time, amplitude, where='post')
+    plt.title('Codificación NRZI de ' + binary_data)
+    plt.xlabel('Tiempo')
+    plt.ylabel('Nivel de señal')
+    plt.ylim(-0.2, 1.2)
+    plt.show()
 
 
 def graficar_codigo_nrzl(cadena_binaria):
@@ -122,7 +138,7 @@ def hamming_encode(data):
             if ((j+1) & (2**i)) == (2**i):
                 row.append(code[j])
             else:
-                row.append('-')
+                row.append(' ')
         row.append(code[2**i-1])
         table.append(row)
 
@@ -145,7 +161,7 @@ def hamming_decode(encoded_bits):
         # parity = sum(parity_bits) % 2
         parity = reduce(operator.xor, parity_bits[1::])
         # Agrega la entrada a la tabla de paridad
-        used_bits = [encoded_bits[j] if (j+1) & (2**i) else 'x' for j in range(len(encoded_bits))]
+        used_bits = [encoded_bits[j] if (j+1) & (2**i) else ' ' for j in range(len(encoded_bits))]
         used_bits.pop(2**i - 1)
         parity_table.append(
             # (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))

@@ -5,6 +5,8 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 import main
 
+class CheckBitLabel(Label):
+    pass
 class ConversionNumbers(Label):
     pass
 class HeaderConversion(Label):
@@ -103,7 +105,7 @@ class HammingEncoderApp(App):
             else: 
                 paridad = 1
             if(main.verificar_paridad(num_bin) == paridad):
-                main.graficar_codigo_nrzl(num_bin)
+                main.nrzi_encoding2(num_bin)
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
@@ -112,7 +114,7 @@ class HammingEncoderApp(App):
     #Abre el popup para generar el error en la codificacion Hamming
     def generarErrorPopup(self,num_bin):
         if(num_bin == ''):
-            popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
+            popup = Popup(title='Alerta', content=Label(text="Agrega el numero binario de 11 bits para editarlo"), size_hint=(None, None), size=(400, 200))
             popup.open()
         else:
             generarErrorPopup = GenerarErrorPopup()
@@ -141,14 +143,24 @@ class HammingEncoderApp(App):
 
                 for i in range(15):
                     tabla_errores.add_widget(TablaLabel(text=str(codigo_error[i])))
-
+                
+                for tupla in parity_table:
+                    tercer_elemento = tupla[2]
+                    tercer_elemento.insert(0, ' ')
+                    print(tercer_elemento)
+                
                 for tupla in parity_table:
                     tercer_elemento = tupla[2]
                     for elemento in tercer_elemento:
                         tabla_errores.add_widget(TablaLabel(text=str(elemento)))
-     
+                
+                bit_check = self.root.ids.bit_check
+                lista_bits_paridad = [str(tupla[1]) for tupla in parity_table]
+                for i in range(4):
+                    bit_check.add_widget(CheckBitLabel(text=str(lista_bits_paridad[i])))
 
-                print(parity_table)
+                
+    
 
 
    #FUNCION
@@ -167,7 +179,7 @@ class HammingEncoderApp(App):
 
         # Agregar los ceros en las posiciones indicadas
             for i in (0,1,3,7):
-                    lista_bits.insert(i, '-')
+                    lista_bits.insert(i, ' ')
         
             bitsParidad = ''.join(lista_bits)
         
