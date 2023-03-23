@@ -7,6 +7,8 @@ import main
 
 class ConversionNumbers(Label):
     pass
+class HeaderConversion(Label):
+    pass
 class HeaderError(Label):
     pass
 class HammingEncoder(FloatLayout):
@@ -74,6 +76,9 @@ class HammingEncoderApp(App):
                 tabla_conversiones = popup.ids.tabla_conversiones
                 tabla_conversiones.clear_widgets()
 
+                header_conv = ['Decimal','Binario','Octal']
+                for i in range(3):
+                    tabla_conversiones.add_widget(HeaderConversion(text=str(header_conv[i])))
                 #Itera la lista de conversiones para rellenar la tabla
                 for i in range(len(listaNumeros)):
                     tabla_conversiones.add_widget(ConversionNumbers(text=str(listaNumeros[i])))
