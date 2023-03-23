@@ -1,16 +1,13 @@
 from kivy.app import App
-from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
-from kivymd.app import MDApp
-from kivy.uix.textinput import TextInput
-from kivymd.uix.datatables import MDDataTable
-from kivy.metrics import dp
+from kivy.uix.button import Button
 import main
 
-
-class TablaParidadPopup(Popup):
+class ConversionNumbers(Label):
+    pass
+class HeaderError(Label):
     pass
 class HammingEncoder(FloatLayout):
     pass
@@ -18,28 +15,41 @@ class TablaLabel(Label):
     pass
 class HeaderLabel(Label):
     pass
-class GenerarErrorPopup(Label):
+class GenerarErrorPopup(Popup):
     pass
-
+class TablaConversionPopup(Popup):
+    pass
 class HammingEncoderApp(App):
-    
     def build(self):
         return HammingEncoder()
     
     def on_start(self):
+        #INICIALIZA LA APLICACION CON VALORES PREDETERMINADOS NECESARIOS COMO
+        #LOS HEADERS DE LAS TABLAS,EL TAMANO DE LA APLICACION
         header_paridad = self.root.ids.header_paridad
+        header_paridad2 = self.root.ids.header_paridad2
         headers = ['P1','P2','D1','P3','D2','D3','D4','P4','D5','D6','D7','D8','D9','D10','D11']
+        headers2 = ['Prueba','Check Bit']
         for i in range(15):
             header_paridad.add_widget(HeaderLabel(text=str(headers[i])))
+        for i in range(15):
+            header_paridad2.add_widget(HeaderLabel(text=str(headers[i])))
+        for i in range(2):
+            header_paridad2.add_widget(HeaderError(text=str(headers2[i])))
+
         self.root_window.size = (1000, 600)
     
+    #FUNCION
+    #Esta funcion se encarga de validar el numero binario a procesar
     def validar_entrada_binaria(self, instancia):
         caracteres_permitidos = set('01')
         if not all(c in caracteres_permitidos for c in instancia.text) or len(instancia.text) > 11:
             instancia.text = instancia.text[:-1]
 
+    #FUNCION
+    #Esta funcion procesa el numero y calcula sus conversiones
     def calcular(self,paridad_text,num_bin):
-        
+        #Crea las validaciones necesarias
         if(paridad_text == 'Paridad' or num_bin == ''):
             popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
             popup.open()
@@ -50,12 +60,34 @@ class HammingEncoderApp(App):
                 paridad = 1
             
             if(main.verificar_paridad(num_bin) == paridad):
+                #Manda los valores para que sean procesados en la logica
                 main.programa(paridad,num_bin)
+                #Llama diversas funciones para retornar su resultado y expresarlo en la GUI
                 self.root.ids.resultado.text = main.convertir_binario_a_hexadecimal(num_bin)
+                num_dec,num_bin,num_oct = main.convertir_hexadecimal_tabla(num_bin)
+
+                #Crea una lista de las conversiones para mostrarlas en pantalla
+                listaNumeros = [num_dec,num_bin,num_oct]
+                
+                #Abre el popup de conversiones
+                popup = TablaConversionPopup()
+                tabla_conversiones = popup.ids.tabla_conversiones
+                tabla_conversiones.clear_widgets()
+
+                #Itera la lista de conversiones para rellenar la tabla
+                for i in range(len(listaNumeros)):
+                    tabla_conversiones.add_widget(ConversionNumbers(text=str(listaNumeros[i])))
+                button = Button(text="OK", size_hint=(None, None), size=(150, 50), font_name='Dependencias\Minecraft.ttf', background_color=(0, 0, 0, 1))
+                button.bind(on_press=lambda instance: popup.dismiss())
+                tabla_conversiones.add_widget(button)
+                popup.open()
+
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
 
+    #FUNCION
+    #Crea la senalNRZL
     def senalNRZL(self,paridad_text, num_bin):
         if(paridad_text == 'Paridad' or num_bin == ''):
             popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
@@ -65,22 +97,57 @@ class HammingEncoderApp(App):
                 paridad = 0
             else: 
                 paridad = 1
-            
             if(main.verificar_paridad(num_bin) == paridad):
                 main.graficar_codigo_nrzl(num_bin)
             else:
                 popup = Popup(title='Alerta', content=Label(text="La paridad no coincide con el numero binario ingresado"), size_hint=(None, None), size=(400, 200))
                 popup.open()
     
-    # def generarErrorPopup(self,num_bin):
-       
-    #     resultado,data = main.hamming_encode(num_bin)
-    #     resultado_edit = ''.join(str(bit) for bit in resultado)
+    #FUNCION
+    #Abre el popup para generar el error en la codificacion Hamming
+    def generarErrorPopup(self,num_bin):
+        if(num_bin == ''):
+            popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
+            popup.open()
+        else:
+            generarErrorPopup = GenerarErrorPopup()
+            generarErrorPopup.open()
+    
+    #FUNCION
+    def generarError(self,bit_posicion,bin_bit,num_bin):
+        print(num_bin)
+        if(bit_posicion == 'Posicion' or bin_bit == 'Error bit'):
+            popup = Popup(title='Alerta', content=Label(text="Agregue la posicion del bit o el binario faltante"), size_hint=(None, None), size=(400, 200))
+            popup.open()
+        else:
+            result,table = main.hamming_encode(num_bin)
+            codigo_error = [int(caracter) for caracter in result]
 
-    #     generarErrorPopup = GenerarErrorPopup()
-    #     generarErrorPopup.open()
-    #     generarErrorPopup.ids.error_input.hint_text = resultado_edit
+            if(codigo_error[int(bit_posicion) - 1] == int(bin_bit)):
+                print(codigo_error,int(bin_bit))
+                popup = Popup(title='Alerta', content=Label(text="Intente ingresar otra posicion para generar el error"), size_hint=(None, None), size=(400, 200))
+                popup.open()
+            else:
+                tabla_errores = self.root.ids.tabla_errores
+                tabla_errores.clear_widgets()
 
+                codigo_error[int(bit_posicion) - 1] = int(bin_bit)
+                decoded_value, parity_table = main.hamming_decode(codigo_error)
+
+                for i in range(15):
+                    tabla_errores.add_widget(TablaLabel(text=str(codigo_error[i])))
+
+                for tupla in parity_table:
+                    tercer_elemento = tupla[2]
+                    for elemento in tercer_elemento:
+                        tabla_errores.add_widget(TablaLabel(text=str(elemento)))
+     
+
+                print(parity_table)
+
+
+   #FUNCION
+    #Genera la tabla de paridad de Hamming 15 11
     def generarTablaParidad(self, num_bin):
         if(num_bin == ''):
             popup = Popup(title='Alerta', content=Label(text="Agrega una paridad o el numero binario\n faltante, asegurate de que coincidan"), size_hint=(None, None), size=(400, 200))
@@ -98,7 +165,6 @@ class HammingEncoderApp(App):
                     lista_bits.insert(i, '-')
         
             bitsParidad = ''.join(lista_bits)
-            print(data)
         
             for i in range(15):
                 tabla_paridad.add_widget(TablaLabel(text=bitsParidad[i]))      

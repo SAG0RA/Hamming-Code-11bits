@@ -51,6 +51,8 @@ def convertir_hexadecimal_tabla(num_hex):
     print("Decimal\t\tBinario\t\tOctal")
     print(f"{num_dec}\t\t{num_bin}\t\t{num_oct}")
 
+    return num_dec,num_bin,num_oct
+
 
 def codificar_nrzl(cadena_binaria):
     """Codifica una cadena binaria utilizando la codificación NRZ-L."""
@@ -125,7 +127,6 @@ def hamming_encode(data):
 
     return code, table
 
-
 def hamming_decode(encoded_bits):
     # Calcula el número de bits de paridad necesarios
     num_parity_bits = 0
@@ -141,8 +142,8 @@ def hamming_decode(encoded_bits):
         # Calcula la paridad para estos bits
         parity = sum(parity_bits) % 2
         # Agrega la entrada a la tabla de paridad
-        used_bits = [encoded_bits[j] for j in range(
-            len(encoded_bits)) if (j+1) & (2**i) and j != (2**i)-1]
+        used_bits = [encoded_bits[j] if (j+1) & (2**i) else 'x' for j in range(len(encoded_bits))]
+        used_bits.pop(2**i - 1)
         parity_table.append(
             (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))
 
@@ -157,10 +158,11 @@ def hamming_decode(encoded_bits):
         # Ignora los bits de paridad
         if (i+1) & i:
             decoded_value.append(encoded_bits[i])
-
+        
+    print(list(reversed(decoded_value)), parity_table,used_bits)
+    
     # Invierte el valor decodificado y devuelve el valor y la tabla de paridad
     return list(reversed(decoded_value)), parity_table
-
 
 def programa(paridad,num_bin):
     """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
@@ -182,10 +184,10 @@ def test():
     # print('Tabla de paridad:')
     # for row in table:
     #     print(row)
-    bits = [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]
+    bits = [1, 0, 0, 0, 1, 1, 0,0,1,0,0]
     decoded_value, parity_table = hamming_decode(bits)
     print("Valor decodificado:", decoded_value)
-    print("Tabla de paridad:")
+    print("Tabla de paridad:", parity_table)
     for entry in parity_table:
         print(
             f"Bit {entry[0]}: Paridad {entry[1]}, bits utilizados: {entry[2]} ({entry[3]})")

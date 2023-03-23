@@ -1,10 +1,38 @@
 #:kivy 2.0.0
 
+
 <CustomLabel@Label>:
     text_size: self.size
     font_name: 'Dependencias\Minecraft.ttf'
     color: 1, 0.6, 0.2, 1
 
+<HeaderConversion@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    font_size: '14sp'
+    font_name: 'Dependencias\Minecraft.ttf'
+    bold: True
+    size:275,40
+    size_hint: (None, None)
+
+<ConversionNumbers@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 1, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    font_size: '12sp'
+    font_name: 'Dependencias\Minecraft.ttf'
+    bold: True
+    size:275,90
+    size_hint: (None, None)
+
+    
 <HeaderLabel@Label>:
     canvas.before:
         Color:
@@ -18,6 +46,18 @@
     size:20,20
     size_hint: (None, None)
 
+<HeaderError@Label>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    font_size: '10sp'
+    bold: True
+    size:70,20
+    size_hint: (None, None)
+    font_name: 'Dependencias\Minecraft.ttf'
 
 <TablaLabel@Label>:
     canvas.before:
@@ -233,40 +273,187 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
+
+##############################################################
+       
+     #BOXLAYOUT PARA HEADERS DE ERRORES     
+    BoxLayout:
+        id: header_paridad2
+        orientation: 'horizontal'
+        padding: 3
+        spacing: 5
+        size_hint: (None, None)
+        size:530,25        
+        pos: 463, 250
+        canvas.before:
+            Color:
+                rgba:0.4, 0.4, 0.4, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
      
+     #BOXLAYOUT PARA ERRORES           
+    BoxLayout:
+        padding: 6
+        spacing: 3
+        size_hint: (None, None)
+        size:105,155
+        pos: 360, 90
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba:0.4, 0.4, 0.4, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        NormalLabel:
+            color: 0.8, 0.8, 0.8, 1
+            halign: 'center'
+            text: 'Bits:'
+
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P1:'
+        
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P2:'
+        
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P3:'
+
+        NormalLabel:
+            color: 0, 0, 0, 1
+            halign: 'center'
+            text: 'P4:'
+    
+    GridLayout:
+        id: tabla_errores
+        size_hint: (None, None)
+        size:380,155
+        pos: 460, 90
+        rows: 5
+        cols: 15
+        spacing: 5
+        padding: 5
+
+        canvas.before:
+            Color:
+                rgba: 0.4, 0.4, 0.4, 1 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
     Button:
         text: 'Generar error'
+        color: 1, 1, 1, 1
+        background_color: 1, 0, 0, 1
         font_name: 'Dependencias\Minecraft.ttf'
         size_hint: (None, None)  
         size: 120, 32  
         pos: 460,290
-        on_press: app.generarErrorPopup()
+        on_press: app.generarErrorPopup(binary_input.text)
+    
+    
         
 <GenerarErrorPopup>:
+    id: error_popup
     title: 'Genera el error en el codigo'
+    title_font: 'Dependencias\Minecraft.ttf'
     size_hint: None, None
-    size: 300, 200
+    size: 230, 320
     auto_dismiss: False
 
     BoxLayout:
         orientation: 'vertical'
         padding: 10
+        spacing: 10
+
         
         CustomLabel:
-            text: 'Cambia el bit para generar error:'
-            # on_text_validate: app.validar_entrada_binaria(self)
-            # on_text: app.validar_entrada_binaria(self)
-            
-        TextInput:
-            id: error_input
-            hint_text: 
+            text: 'Posicion del bit de error:'
             font_size: '15sp'
+            
+        Spinner:
+            id: bit_posicion
+            font_name: 'Dependencias\Minecraft.ttf'
+            size_hint: (None,None)
+            size: 150,50
+            text: 'Posicion'
+            values: ['1', '2','3','4','5','6','7','8','9','10','11','12','13','14','15']
         
+        CustomLabel:
+            text: 'Eliga el bit de error:'
+            font_size: '15sp'
+            
+        Spinner:
+            id: bin_bit
+            font_name: 'Dependencias\Minecraft.ttf'
+            size_hint: (None,None)
+            size: 150,50
+            text: 'Error bit'
+            values: ['1', '0']
+
         Button:
-            text: 'Ingresar'
-            size_hint: 1, 0.5
-            on_press: root.dismiss()    
+            text: 'Detectar error'
+            background_color: 0, 0, 0, 1
+            font_name: 'Dependencias\Minecraft.ttf'
+            size_hint: (None,None)
+            size: 150,50
+            on_press: root.dismiss();app.generarError(bit_posicion.text,bin_bit.text,app.root.ids.binary_input.text)    
 
            
+<TablaConversionPopup>:
+    id: popupConversion
+    title: 'Tabla de conversiones'
+    title_font: 'Dependencias\Minecraft.ttf'
+    size_hint: None, None
+    size: 900, 310
+    auto_dismiss: False
+
+    GridLayout:
+        id:tabla_conversiones
+        cols:3
+        rows:3
+        spacing: 5
+        padding: 20
+        size_hint: None, None
+        size: 870, 220
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+        canvas.before:
+            Color:
+                rgba: 0.4, 0.4, 0.4, 1 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        HeaderConversion:
+            text:"Decimal"
+        
+      
+        HeaderConversion:
+            text:"Binario"
+
+        
+        HeaderConversion:
+            text:"Octal"
+        
+     
+        # ConversionNumbers:
+        #     text:'sexo'
+        # ConversionNumbers:
+        #     text:'sexo'
+        # ConversionNumbers:
+        #     text:'sexo'
+
+        
+        
 
     
