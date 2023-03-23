@@ -135,8 +135,13 @@ class HammingEncoderApp(App):
                 popup = Popup(title='Alerta', content=Label(text="Intente ingresar otra posicion para generar el error"), size_hint=(None, None), size=(400, 200))
                 popup.open()
             else:
+                bit_check = self.root.ids.bit_check
+                compro_box = self.root.ids.compro_box
+
                 tabla_errores = self.root.ids.tabla_errores
                 tabla_errores.clear_widgets()
+                compro_box.clear_widgets()
+                bit_check.clear_widgets()
 
                 codigo_error[int(bit_posicion) - 1] = int(bin_bit)
                 decoded_value, parity_table = main.hamming_decode(codigo_error)
@@ -155,12 +160,12 @@ class HammingEncoderApp(App):
                     for elemento in tercer_elemento:
                         tabla_errores.add_widget(TablaLabel(text=str(elemento)))
                 
-                bit_check = self.root.ids.bit_check
+      
                 lista_bits_paridad = [str(tupla[1]) for tupla in parity_table]
                 for i in range(4):
                     bit_check.add_widget(CheckBitLabel(text=str(lista_bits_paridad[i])))
                 
-                compro_box = self.root.ids.compro_box
+
                 lista_comprobacion = [str(tupla[3]) for tupla in parity_table]
                 for i in range(4):
                     compro_box.add_widget(CheckBitLabel(text=str(lista_comprobacion[i])))
