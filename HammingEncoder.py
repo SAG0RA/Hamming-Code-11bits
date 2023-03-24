@@ -21,6 +21,8 @@ class HeaderLabel(Label):
     pass
 class GenerarErrorPopup(Popup):
     pass
+class CreditosPopup(Popup):
+    pass
 class TablaConversionPopup(Popup):
     pass
 class HammingEncoderApp(App):
@@ -216,6 +218,10 @@ class HammingEncoderApp(App):
     # Agregar los elementos de la lista resultado a la última fila
             for i in range(15):
                 tabla_paridad.add_widget(TablaLabel(text=str(resultado[i])))
+            
+    def creditos(self):
+        popup = CreditosPopup()
+        popup.open()
                 
 
 if __name__ == '__main__':

@@ -183,6 +183,7 @@
         Button:
             text: 'Creditos'
             font_name: 'Dependencias\Minecraft.ttf'
+            on_press: app.creditos()
             size_hint_y: None
             height: 50
     
@@ -493,9 +494,47 @@
                 size: self.size
 
 
-        
-     
- 
-        
+<CreditosPopup>:
+    id: creditos
+    title: 'CREDITOS'
+    title_font: 'Dependencias\Minecraft.ttf'
+    size_hint: None, None
+    size: 350, 350
+    auto_dismiss: False
 
-    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 15
+        spacing: 15        
+
+        CustomLabel:
+            text: 'ESTUDIANTES:'
+            font_size: '20sp'
+ 
+        NormalLabel:
+            text: 'Daniel Brenes Gomez 2018112965'
+            font_size: '15sp'
+
+        NormalLabel:
+            text: 'Axel Cordero Martinez 2019052017'
+            font_size: '15sp'
+
+        NormalLabel:
+            text: 'Jesus Soto Benavides  2018156079'
+            font_size: '15sp'
+        
+        NormalLabel:
+            text: 'Marco Rivera Serrano  2018118206'
+            font_size: '15sp'
+        
+        NormalLabel:
+            text: 'Saul Gomez Ramirez 2019161687'
+            font_size: '15sp'
+
+        Button:
+            text: 'Cerrar'
+            background_color: 0, 0, 0, 1
+            font_name: 'Dependencias\Minecraft.ttf'
+            size_hint: (None,None)
+            size: 150,50
+            on_press: root.dismiss()
