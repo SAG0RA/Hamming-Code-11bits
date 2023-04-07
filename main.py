@@ -173,9 +173,34 @@ def hamming_decode(encoded_bits):
         used_bits.pop(2**i - 1)
         parity_table.append(
             # (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))
-            (i+1, parity, used_bits, "correcto" if parity == parity_bits[0] else "error"))
+            (i+1, parity, used_bits, 0 if parity == parity_bits[0] else 1))
 
     ######################################################ERROR EN LA DECODIFICACIÓN###################################
+    #Se obitene la posicion del bit erroneo
+    error_bit = []
+    for index in range(len(parity_table)):
+        error_bit.append(parity_table[index][3])
+    error_bit.reverse()
+    #Si la posicion en binario es 0, no hay error, de lo contrario si
+
+    check_if_error_exists = check_error_bit(error_bit, 0)
+
+    if(check_if_error_exists):
+        print("No hay error en la decodificacion")
+        decoded_value = get_original_data(encoded_bits)
+        return decoded_value, parity_table
+    else:
+        pos_error_bit = 0
+        for index in range(len(error_bit)):
+            pos_error_bit = pos_error_bit*10+error_bit[index]
+        # Se agrega el 0b para que Python pueda realizar la conversion de binario a decimal
+        pos_error_bit = int("0b" + str(pos_error_bit), 2) - 1
+        print("Hay un error en la posicion: ", pos_error_bit)
+        decoded_value = fix_error_bit(encoded_bits, pos_error_bit)
+        return decoded_value, parity_table
+    
+
+"""
     # Invierte la lista de bits para facilitar el procesamiento
     encoded_bits = list(reversed(encoded_bits))
     # Inicializa el valor decodificado
@@ -188,7 +213,41 @@ def hamming_decode(encoded_bits):
             decoded_value.append(encoded_bits[i])
             
     # Invierte el valor decodificado y devuelve el valor y la tabla de paridad
-    return list(reversed(decoded_value)), parity_table
+    return list(reversed(decoded_value)), parity_table"""
+
+def check_error_bit(error_bit: list, value: int):
+    for index in error_bit:
+        if index != value:
+            return False
+    return True
+
+def get_original_data(encoded_bits: list):
+    #Se obtienen los indices de los bits  de paridad
+    num_parity_bits = 0
+    bit_parity_index = []
+    while 2 ** num_parity_bits <= len(encoded_bits):
+        bit_parity_index.append(2 ** num_parity_bits - 1)
+        num_parity_bits += 1
+    
+    # Se eliminan los bits de paridad y se devuelve el mensaje original
+    for index in range(len(bit_parity_index)):
+        encoded_bits.pop(bit_parity_index[index]-index)
+    return encoded_bits
+
+def fix_error_bit(encoded_bits: list, error_index: int):
+    # Se sustituye el valor segun corresponda
+    if(encoded_bits[error_index] == 0):
+        encoded_bits[error_index] = 1
+        # Se obtiene el mensaje original
+        decoded_value = get_original_data(encoded_bits)
+        return decoded_value
+    else:
+        encoded_bits[error_index] = 0
+        # Se obtiene el mensaje original
+        decoded_value = get_original_data(encoded_bits)
+        return decoded_value
+    pass
+
 
 def programa(paridad,num_bin):
     """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
@@ -210,7 +269,7 @@ def test():
     # print('Tabla de paridad:')
     # for row in table:
     #     print(row)
-    bits = [1, 0, 0, 0, 1, 1, 0,0,1,0,0]
+    bits = [1,0,1,1,0,0,0,1,0,1,0,0,1,0,0]
     decoded_value, parity_table = hamming_decode(bits)
     print(f"Valor decodificado: {decoded_value}\n")
     print(f"Tabla de paridad: {parity_table}\n")
