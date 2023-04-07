@@ -5,103 +5,10 @@ from functools import reduce
 # cadena de prueba 11001101011
 # pariedad impar == 1
 
-#0 representa paridad par, 1 paridad impar
-def verificar_paridad(binario):
-    unos = binario.count('1')
-    if unos % 2 == 0:
-        return 0
-    else:
-        return 1
-
-def hex_to_bin(hex_num):
-    # Convertimos el número hexadecimal en binario y eliminamos el prefijo "0b"
-    bin_num = bin(int(hex_num, 16))[2:]
-    
-    # Agregamos ceros a la izquierda hasta completar los 11 dígitos
-    bin_num = '0' * (11 - len(bin_num)) + bin_num
-    
-    return bin_num
-
-def verificar_binario(num_bin):
-    """Verifica que el número ingresado sea binario y tenga 11 bits."""
-    if len(num_bin) != 11:
-        print("El número ingresado no tiene 11 bits.")
-        return False
-    elif not all(d in "01" for d in num_bin):
-        print("El número ingresado no es binario.")
-        return False
-    else:
-        return True
 
 
-def verificar_rango(num_dec):
-    """Verifica que el número decimal esté en el rango permitido."""
-    if num_dec < 0 or num_dec > 2047:
-        print("El número ingresado está fuera del rango permitido (0 a 2047).")
-        return False
-    else:
-        return True
 
 
-def convertir_binario_a_hexadecimal(num_bin):
-    """Convierte el número binario a hexadecimal con un formato de 3 dígitos."""
-    num_dec = int(num_bin, 2)
-    num_hex = format(num_dec, "03X")
-    return num_hex
-
-
-def convertir_hexadecimal_tabla(num_hex):
-    """Convierte el número hexadecimal a octal, binario y decimal y muestra los resultados en una tabla."""
-    num_dec = int(num_hex, 16)
-    num_bin = format(num_dec, "011b")
-    num_oct = format(num_dec, "o")
-
-    print("Números equivalentes al número hexadecimal", num_hex)
-    print("Decimal\t\tBinario\t\tOctal")
-    print(f"{num_dec}\t\t{num_bin}\t\t{num_oct}")
-
-    return num_dec,num_bin,num_oct
-
-
-def nrzi_encoding2(binary_data):
-    # Suponemos que la señal está en nivel bajo antes de t=0
-    signal_level = 0
-
-    # Inicializamos las listas de tiempo y amplitud de la señal
-    time = [0]
-    amplitude = [0]
-
-    # Recorremos cada bit del número binario de entrada
-    for bit in binary_data:
-        # Si el bit es un 1, invertimos el nivel de la señal
-        if bit == '1':
-            signal_level = not signal_level
-
-        # Añadimos el tiempo y la amplitud correspondiente al nivel actual de la señal
-        time.append(time[-1])
-        amplitude.append(signal_level)
-        time.append(time[-1] + 1)
-        amplitude.append(signal_level)
-
-    # Mostramos la figura de la señal codificada
-    plt.step(time, amplitude, where='post')
-    plt.title('Codificación NRZI de ' + binary_data)
-    plt.xlabel('Tiempo')
-    plt.ylabel('Nivel de señal')
-    plt.ylim(-0.2, 1.2)
-    plt.show()
-
-
-def graficar_codigo_nrzl(cadena_binaria):
-    # Convertimos el número binario a niveles de tensión utilizando NRZ-L
-    niveles_tension = codificar_nrzl(cadena_binaria)
-
-    # Graficamos la señal
-    plt.plot(range(len(niveles_tension)), niveles_tension, drawstyle='steps-pre')
-    plt.xlabel('Tiempo (bits)')
-    plt.ylabel('Nivel de tensión')
-    plt.ylim(-1.5, 1.5)
-    plt.show()
 
 def hamming_encode(data, parity='par'):
     n = len(data)
@@ -256,20 +163,6 @@ def fix_error_bit(encoded_bits: list, error_index: int):
         decoded_value = get_original_data(encoded_bits)
         return decoded_value
     pass
-
-
-def programa(paridad,num_bin):
-    """Función principal que solicita al usuario un número binario y lo convierte a hexadecimal."""
-    # while True:
-        # paridad = int(input("Ingrese un 0 si desea paridad par o 1 si desea impar: \n"))
-        # num_bin = input("Ingrese un número binario de 11 bits: ")
-    if verificar_binario(num_bin) and (paridad == verificar_paridad(num_bin)):
-        num_hex = convertir_binario_a_hexadecimal(num_bin)
-        if verificar_rango(int(num_bin, 2)):
-            print(
-                f"El número binario {num_bin} es equivalente al número hexadecimal {num_hex}.")
-            convertir_hexadecimal_tabla(num_hex)
-            #graficar_codigo_nrzl(num_bin)
         
 def test():
     # codigo = "00010011001"
