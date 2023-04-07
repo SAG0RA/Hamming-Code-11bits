@@ -173,16 +173,23 @@ def hamming_decode(encoded_bits):
         used_bits.pop(2**i - 1)
         parity_table.append(
             # (i+1, parity, used_bits, "correcto" if parity == encoded_bits[(2**i)-1] else "error"))
-            (i+1, parity, used_bits, 0 if parity == parity_bits[0] else 1))
+            (i+1, parity, used_bits, "correcto" if parity == parity_bits[0] else "error"))
 
     ######################################################ERROR EN LA DECODIFICACIÓN###################################
     #Se obitene la posicion del bit erroneo
     error_bit = []
     for index in range(len(parity_table)):
         error_bit.append(parity_table[index][3])
-    error_bit.reverse()
-    #Si la posicion en binario es 0, no hay error, de lo contrario si
 
+    error_bit.reverse()
+
+    for i in range(len(error_bit)):
+        if error_bit[i] == 'correcto':
+            error_bit[i] = 0
+        else:
+            error_bit[i] = 1
+    print(error_bit)
+    #Si la posicion en binario es 0, no hay error, de lo contrario si
     check_if_error_exists = check_error_bit(error_bit, 0)
 
     if(check_if_error_exists):
@@ -269,7 +276,7 @@ def test():
     # print('Tabla de paridad:')
     # for row in table:
     #     print(row)
-    bits = [1,0,1,1,0,0,0,1,0,1,0,0,1,0,0]
+    bits = [1,0,1,1,0,0,0,1,1,1,0,0,1,0,0]
     decoded_value, parity_table = hamming_decode(bits)
     print(f"Valor decodificado: {decoded_value}\n")
     print(f"Tabla de paridad: {parity_table}\n")
