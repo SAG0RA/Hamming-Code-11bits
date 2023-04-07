@@ -103,8 +103,7 @@ def graficar_codigo_nrzl(cadena_binaria):
     plt.ylim(-1.5, 1.5)
     plt.show()
 
-
-def hamming_encode(data):
+def hamming_encode(data, parity='par'):
     n = len(data)
     # Calculamos el número de bits de paridad necesarios (m)
     for i in range(n):
@@ -136,7 +135,10 @@ def hamming_encode(data):
             if ((j+1) & (2**i)) == (2**i):
                 p ^= code[j]
         # Asignamos el bit de paridad calculado a la posición correspondiente
-        code[2**i-1] = p
+        if parity == 'impar':
+            code[2**i-1] = int(not p)
+        else:
+            code[2**i-1] = p
 
     # Creamos una tabla con los datos de paridad y los datos de base
     table = []

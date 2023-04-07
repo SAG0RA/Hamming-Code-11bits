@@ -113,14 +113,12 @@
         pos: 60,430
     
     NormalLabel:
-        text: 'Ingrese numero binario de 11 bits:'
+        text: 'Ingrese numero hexadecimal de 3 digitos:'
         size: 100, 100
         pos: 60,390
 
     TextInput:
         id: binary_input
-        on_text_validate: app.validar_entrada_binaria(self)
-        on_text: app.validar_entrada_binaria(self)
         size_hint: (None, None)  # desactiva size_hint para establecer el tamaño en píxeles
         size: 120, 32  # establece el tamaño en píxeles
         pos: 60, 345
@@ -131,10 +129,10 @@
         size_hint: (None, None)  
         size: 120, 32  
         pos: 60,300
-        on_press: app.calcular(parity_spinner.text, binary_input.text)
+        on_press: app.calcular(binary_input.text)
 
     CustomLabel:
-        text: 'Resultado (HEX):'
+        text: 'Resultado binario:'
         pos: 210, 350
         font_size: '20sp'
     
@@ -171,14 +169,14 @@
             font_name: 'Dependencias\Minecraft.ttf'
             size_hint_y: None
             height: 50
-            on_press: app.senalNRZL(parity_spinner.text, binary_input.text)
+            on_press: app.senalNRZL(binary_input.text)
 
         Button:
             text: 'Tabla de paridad'
             font_name: 'Dependencias\Minecraft.ttf'
             size_hint_y: None
             height: 50
-            on_press: app.generarTablaParidad(binary_input.text)
+            on_press: app.generarTablaParidad(binary_input.text,parity_spinner.text)
         
         Button:
             text: 'Creditos'
@@ -187,15 +185,20 @@
             size_hint_y: None
             height: 50
     
-    Label:
-        text: '[15,11]'
-        pos: 460,500
+    CustomLabel:
+        id: label_paridad
+        text: 'Paridad'
+        font_size: '15sp'
+        color: 0, 1, 0, 1
+        pos: 480,505
         canvas.before:
             Color:
-                rgba: 0.4, 0.4, 0.4, 1  
+                rgba:0.4, 0.4, 0.4, 1
             Rectangle:
-                pos: self.pos
+                pos: 460,500
                 size: 95,25
+
+   
     
     CustomLabel:
         text: 'Tabla #1. Calculo de los bits de paridad en el codigo Hamming:'
